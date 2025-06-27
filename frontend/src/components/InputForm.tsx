@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { SquarePen, Brain, Send, StopCircle, Zap, Cpu } from "lucide-react";
+import {
+  SquarePen,
+  Brain,
+  Send,
+  StopCircle,
+  Zap,
+  Loader,
+  Cpu,
+} from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -131,7 +139,7 @@ export const InputForm: React.FC<InputFormProps> = ({
               Model
             </div>
             <Select value={model} onValueChange={setModel}>
-              <SelectTrigger className="w-[350px] bg-transparent border-none cursor-pointer">
+              <SelectTrigger className="w-[200px] bg-transparent border-none cursor-pointer">
                 <SelectValue placeholder="Model" />
               </SelectTrigger>
               <SelectContent className="bg-neutral-700 border-neutral-600 text-neutral-300 cursor-pointer">
@@ -149,7 +157,7 @@ export const InputForm: React.FC<InputFormProps> = ({
                   className="hover:bg-neutral-600 focus:bg-neutral-600 cursor-pointer"
                 >
                   <div className="flex items-center">
-                    <Zap className="h-4 w-4 mr-2 text-orange-400" />{" "}
+                    <Cpu className="h-4 w-4 mr-2 text-orange-400" />{" "}
                     gpt-4.1-mini
                   </div>
                 </SelectItem>
@@ -158,7 +166,8 @@ export const InputForm: React.FC<InputFormProps> = ({
                   className="hover:bg-neutral-600 focus:bg-neutral-600 cursor-pointer"
                 >
                   <div className="flex items-center">
-                    <Cpu className="h-4 w-4 mr-2 text-purple-400" /> gpt-4o-mini
+                    <Loader className="h-4 w-4 mr-2 text-purple-400" />{" "}
+                    gpt-4o-mini
                   </div>
                 </SelectItem>
               </SelectContent>

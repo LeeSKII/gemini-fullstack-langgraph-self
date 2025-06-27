@@ -60,7 +60,7 @@ tavily_client = TavilyClient(api_key=tavily_api_key)
 def generate_query(state: OverallState, config: RunnableConfig) -> QueryGenerationState:
     """LangGraph node that generates search queries based on the User's question.
 
-    Uses Gemini 2.0 Flash to create an optimized search queries for web research based on
+    Uses llm to create an optimized search queries for web research based on
     the User's question.
 
     Args:
@@ -76,13 +76,8 @@ def generate_query(state: OverallState, config: RunnableConfig) -> QueryGenerati
     if state.get("initial_search_query_count") is None:
         state["initial_search_query_count"] = configurable.number_of_initial_queries
 
-    # init Gemini 2.0 Flash
-    # llm = ChatGoogleGenerativeAI(
-    #     model=configurable.query_generator_model,
-    #     temperature=1.0,
-    #     max_retries=2,
-    #     api_key=os.getenv("GEMINI_API_KEY"),
-    # )
+    # init openai/gpt-4.1-nano
+    llm = ChatOpenAI(model=configurable.query_generator_model,temperature=0.01,max_tokens=None,timeout=None,max_retries=2,api_key=api_key,base_url=base_url)
     structured_llm = llm.with_structured_output(SearchQueryList)
 
     # Format the prompt
@@ -192,12 +187,7 @@ def reflection(state: OverallState, config: RunnableConfig) -> ReflectionState:
         summaries="\n\n---\n\n".join(state["web_research_result"]),
     )
     # init Reasoning Model
-    # llm = ChatGoogleGenerativeAI(
-    #     model=reasoning_model,
-    #     temperature=1.0,
-    #     max_retries=2,
-    #     api_key=os.getenv("GEMINI_API_KEY"),
-    # )
+    llm = ChatOpenAI(model=reasoning_model,temperature=0.01,max_tokens=None,timeout=None,max_retries=2,api_key=api_key,base_url=base_url)
     
     result = llm.with_structured_output(Reflection).invoke(formatted_prompt)
 
@@ -272,12 +262,7 @@ def finalize_answer(state: OverallState, config: RunnableConfig):
     )
 
     # init Reasoning Model, default to Gemini 2.5 Flash
-    # llm = ChatGoogleGenerativeAI(
-    #     model=reasoning_model,
-    #     temperature=0,
-    #     max_retries=2,
-    #     api_key=os.getenv("GEMINI_API_KEY"),
-    # )
+    llm = ChatOpenAI(model=reasoning_model,temperature=0.01,max_tokens=None,timeout=None,max_retries=2,api_key=api_key,base_url=base_url)
     
     result = llm.invoke(formatted_prompt)
 
