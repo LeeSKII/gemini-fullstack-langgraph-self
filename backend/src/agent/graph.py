@@ -148,7 +148,7 @@ def web_research(state: WebSearchState, config: RunnableConfig) -> OverallState:
     
     search_result = response['results']
     
-    sources_gathered = [f"[{item['title']}({item['url']})\n{item['content']}]" for item in search_result]
+    sources_gathered = [f"[{item['title']}]({item['url']})\n{item['content']}]" for item in search_result]
     
     web_research_result = [item['content'] for item in search_result]
     
@@ -196,6 +196,7 @@ def reflection(state: OverallState, config: RunnableConfig) -> ReflectionState:
         "knowledge_gap": result.knowledge_gap,
         "reflection_content":result.knowledge_gap,
         "follow_up_queries": result.follow_up_queries,
+        "max_research_loops":state["max_research_loops"],
         "research_loop_count": state["research_loop_count"],
         "number_of_ran_queries": len(state["search_query"]),
     }
@@ -217,6 +218,7 @@ def evaluate_research(
     Returns:
         String literal indicating the next node to visit ("web_research" or "finalize_summary")
     """
+    # print("evaluate_research",','.join(state.keys())) #这里的条件边只接收到了ReflectionState中的键值
     configurable = Configuration.from_runnable_config(config)
     max_research_loops = (
         state.get("max_research_loops")

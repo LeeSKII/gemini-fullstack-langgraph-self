@@ -33,7 +33,7 @@ export default function App() {
       if (event.generate_query) {
         processedEvent = {
           title: "Generating Search Queries",
-          data: event.generate_query?.search_query?.join(", ") || "",
+          data: event.generate_query?.initial_search_query?.join(", ") || "",
         };
       } else if (event.web_research) {
         const sources = event.web_research.raw_search_result || [];
