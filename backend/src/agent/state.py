@@ -17,7 +17,8 @@ class OverallState(TypedDict):
     sources_gathered: Annotated[list, operator.add]
     raw_search_result:Annotated[list,operator.add]
     initial_search_query_count: int
-    initial_search_query:list
+    initial_search_query:list #第一次生成query string的结果
+    reflection_content:str #每一次反思的内容
     max_research_loops: int
     research_loop_count: int
     reasoning_model: str

@@ -28,6 +28,7 @@ export default function App() {
     assistantId: "agent",
     messagesKey: "messages",
     onUpdateEvent: (event: any) => {
+      console.log("event", event); //这里返回的数据都是各个节点中的全局state中包含的键才会返回
       let processedEvent: ProcessedEvent | null = null;
       if (event.generate_query) {
         processedEvent = {
@@ -48,10 +49,9 @@ export default function App() {
           }.`,
         };
       } else if (event.reflection) {
-        console.log(event.reflection);
         processedEvent = {
           title: "Reflection",
-          data: `Analysing Web Research Results.`,
+          data: `Analysing Web Research Results: ${event.reflection.reflection_content}`,
         };
       } else if (event.finalize_answer) {
         processedEvent = {
