@@ -53,7 +53,7 @@ model = os.getenv("MODEL_NAME")
 # Used for Google Search API
 # genai_client = Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-llm = ChatOpenAI(model=model,temperature=0.01,max_tokens=None,timeout=None,max_retries=2,api_key=api_key,base_url=base_url)
+llm = ChatOpenAI(model=model,temperature=0.01,timeout=None,max_retries=2,api_key=api_key,base_url=base_url)
 tavily_client = TavilyClient(api_key=tavily_api_key)
 
 # Nodes
@@ -77,7 +77,7 @@ def generate_query(state: OverallState, config: RunnableConfig) -> QueryGenerati
         state["initial_search_query_count"] = configurable.number_of_initial_queries
 
     # init openai/gpt-4.1-nano
-    llm = ChatOpenAI(model=configurable.query_generator_model,temperature=0.01,max_tokens=None,timeout=None,max_retries=2,api_key=api_key,base_url=base_url)
+    llm = ChatOpenAI(model=configurable.query_generator_model,temperature=0.01,timeout=None,max_retries=2,api_key=api_key,base_url=base_url)
     structured_llm = llm.with_structured_output(SearchQueryList)
 
     # Format the prompt
@@ -89,7 +89,7 @@ def generate_query(state: OverallState, config: RunnableConfig) -> QueryGenerati
     )
     # Generate the search queries
     result = structured_llm.invoke(formatted_prompt)
-    return {"search_query": result.query}
+    return {"initial_search_query": result.query}
 
 
 def continue_to_web_research(state: QueryGenerationState):
@@ -99,7 +99,7 @@ def continue_to_web_research(state: QueryGenerationState):
     """
     return [
         Send("web_research", {"search_query": search_query, "id": int(idx)})
-        for idx, search_query in enumerate(state["search_query"])
+        for idx, search_query in enumerate(state["initial_search_query"])
     ]
 
 
@@ -187,7 +187,7 @@ def reflection(state: OverallState, config: RunnableConfig) -> ReflectionState:
         summaries="\n\n---\n\n".join(state["web_research_result"]),
     )
     # init Reasoning Model
-    llm = ChatOpenAI(model=reasoning_model,temperature=0.01,max_tokens=None,timeout=None,max_retries=2,api_key=api_key,base_url=base_url)
+    llm = ChatOpenAI(model=reasoning_model,temperature=0.01,timeout=None,max_retries=2,api_key=api_key,base_url=base_url)
     
     result = llm.with_structured_output(Reflection).invoke(formatted_prompt)
 

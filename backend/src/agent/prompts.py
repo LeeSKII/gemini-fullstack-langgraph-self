@@ -11,7 +11,6 @@ query_writer_instructions = """Your goal is to generate sophisticated and divers
 Instructions:
 - Always prefer a single search query, only add another query if the original question requests multiple aspects or elements and one query is not enough.
 - Each query should focus on one specific aspect of the original question.
-- Don't produce more than {number_queries} queries.
 - Queries should be diverse, if the topic is broad, generate more than 1 query.
 - Don't generate multiple similar queries, 1 is enough.
 - Query should ensure that the most current information is gathered. The current date is {current_date}.
@@ -31,7 +30,11 @@ Topic: What revenue grew more last year apple stock or the number of people buyi
 }}
 ```
 
-Context: {research_topic}"""
+Context: {research_topic}
+
+Rules:
+- Don't produce more than {number_queries} queries.
+"""
 
 
 web_searcher_instructions = """Conduct targeted Google Searches to gather the most recent, credible information on "{research_topic}" and synthesize it into a verifiable text artifact.
