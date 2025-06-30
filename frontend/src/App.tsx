@@ -40,7 +40,7 @@ export default function App() {
         const uniqueLabels = [
           ...new Set(sources.map((s: any) => s.title).filter(Boolean)),
         ];
-        const exampleLabels = uniqueLabels.slice(0, 3).join(", ");
+        const exampleLabels = uniqueLabels.slice(0, 5).join(", ");
         processedEvent = {
           title: "Web Research",
           data: `Gathered ${numSources} sources. Related to: ${
@@ -48,9 +48,10 @@ export default function App() {
           }.`,
         };
       } else if (event.reflection) {
+        console.log(event.reflection);
         processedEvent = {
           title: "Reflection",
-          data: "Analysing Web Research Results",
+          data: `Analysing Web Research Results.`,
         };
       } else if (event.finalize_answer) {
         processedEvent = {

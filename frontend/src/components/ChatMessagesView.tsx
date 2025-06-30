@@ -196,11 +196,13 @@ const AiMessageBubble: React.FC<AiMessageBubbleProps> = ({
           />
         </div>
       )}
-      <ReactMarkdown components={mdComponents}>
-        {typeof message.content === "string"
-          ? message.content
-          : JSON.stringify(message.content)}
-      </ReactMarkdown>
+      {isLastMessage && (
+        <ReactMarkdown components={mdComponents}>
+          {typeof message.content === "string"
+            ? message.content
+            : JSON.stringify(message.content)}
+        </ReactMarkdown>
+      )}
       <Button
         variant="default"
         className={`cursor-pointer bg-neutral-700 border-neutral-600 text-neutral-300 self-end ${
