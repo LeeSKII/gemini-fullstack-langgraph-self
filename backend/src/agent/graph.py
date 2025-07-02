@@ -77,7 +77,7 @@ def generate_query(state: OverallState, config: RunnableConfig) -> QueryGenerati
         state["initial_search_query_count"] = configurable.number_of_initial_queries
 
     # init openai/gpt-4.1-nano
-    llm = ChatOpenAI(model=configurable.query_generator_model,temperature=0.01,timeout=None,max_retries=2,api_key=api_key,base_url=base_url)
+    llm = ChatOpenAI(model=model,temperature=0.01,timeout=None,max_retries=2,api_key=api_key,base_url=base_url)
     structured_llm = llm.with_structured_output(SearchQueryList)
 
     # Format the prompt
